@@ -1,5 +1,6 @@
 using Gauge.CSharp.Lib;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 
 namespace com.automationpractice.step_implementations.pages
@@ -39,9 +40,14 @@ namespace com.automationpractice.step_implementations.pages
 
         public void ClickAddToCart()
         {
+            WebDriverWait wait = new WebDriverWait(_webDriver, new System.TimeSpan(0, 0, 30));
             By identifier = By.XPath("//*[text()[contains(.,'Add to cart')]]");
+            wait.Until(e => e.FindElement(identifier));
             IWebElement element = _webDriver.FindElement(identifier);
-            element.Click();
+            Actions builder = new Actions(_webDriver);
+            builder.MoveToElement(element).Click();
+            IAction ClickAddToCart = builder.Build();
+            ClickAddToCart.Perform();
             GaugeMessages.WriteMessage("Add to cart is clicked.");
             GaugeScreenshots.Capture();
         }
